@@ -1,0 +1,73 @@
+---
+- name   : playbook 3 for apache2
+  hosts  : apache1, apache2
+  become : yes
+ 
+  tasks  :
+
+  - name: create a directory www if it does not exist /www
+    ansible.builtin.file:
+      path   : /www
+      state  : directory
+      mode   : '0777'
+
+  - name: Add line NFS /www to /etc/fstab
+    ansible.builtin.lineinfile:
+      path   : /etc/fstab
+      line   : 'mowsprx1:/www                          /www        nfs   rw        0  0'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: Execute command mount /www
+    shell: 
+      cmd: "systemctl daemon-reload && mount -a"
+
+  - name: install a list of basic packages
+    ansible.builtin.apt:
+      name: apache2
+      update_cache: yes
+
+  - name: copy apache2 config 1
+    copy:
+      src   : /ansible/push/apache2/etc/apache2/apache2.conf
+      dest  : /etc/apache2/apache2.conf
+      owner : root
+      group : root
+      mode  : '0644'
+      backup: yes
+
+  - name: copy apache2 config 2
+    copy:
+      src   : /ansible/push/apache2/etc/apache2/sites-available/000-default.conf
+      dest  : /etc/apache2/sites-available/000-default.conf
+      owner : root
+      group : root
+      mode  : '0644'
+      backup: yes
+
+  - name: restart apache2
+    systemd:
+      unit: apache2
+      state: restarted
+      enabled: yes
+      daemon_reload: yes
+
+  - name: install PHP packages for Wordpress
+    ansible.builtin.apt:
+      pkg:
+      - php8.2
+      - php8.2-cli
+      - php8.2-common
+      - php8.2-imap
+      - php8.2-redis
+      - php8.2-snmp
+      - php8.2-xml
+      - php8.2-mysqli
+      - php8.2-zip
+      - php8.2-mbstring
+      - php8.2-curl
+      - libapache2-mod-php
+      update_cache: yes
+...

@@ -1,0 +1,61 @@
+---
+- name   : playbook 4 for MySQL source setup
+  hosts  : mysqlsrs
+  become : yes
+ 
+  tasks  :
+
+  - name: copy MySQL repository
+    copy:
+      src   : /ansible/push/mysql/repository_add/etc/apt/sources.list.d/mysql.list
+      dest  : /etc/apt/sources.list.d/mysql.list
+      owner : root
+      group : root
+      mode  : '0644'
+      backup: yes
+
+  - name: copy MySQL repository keyring
+    copy:
+      src   : /ansible/push/mysql/repository_add/usr/share/keyrings/mysql-apt-config.gpg
+      dest  : /usr/share/keyrings/mysql-apt-config.gpg
+      owner : root
+      group : root
+      mode  : '0644'
+      backup: yes
+
+  - name: Execute command apt update
+    shell: 
+      cmd: "apt update"
+
+  - name: Execute command install MySQL in noninteractive mode
+    shell: 
+      cmd: "export DEBIAN_FRONTEND=noninteractive && sudo -E apt install -y mysql-server"
+
+  - name: copy MySQL config
+    copy:
+      src   : /ansible/push/mysqlsrs/etc/mysql/mysql.conf.d/mysqld.cnf
+      dest  : /etc/mysql/mysql.conf.d/mysqld.cnf
+      owner : root
+      group : root
+      mode  : '0644'
+      backup: yes
+
+  - name: restart MySQL
+    systemd:
+      unit: mysql.service
+      state: restarted
+      enabled: yes
+      daemon_reload: yes
+
+  - name: Execute command create user for MySQL source
+    shell: 
+      cmd: mysql -e "CREATE USER repl@'%' IDENTIFIED WITH 'caching_sha2_password' BY 'oTUSlave#2020';"
+
+  - name: Execute command MySQL install
+    shell: 
+      cmd: mysql -e "GRANT REPLICATION SLAVE ON *.* TO repl@'%';"
+
+  - name: Execute command MySQL install
+    shell: 
+      cmd: mysql -e "FLUSH PRIVILEGES;"
+...

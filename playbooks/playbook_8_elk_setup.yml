@@ -1,0 +1,104 @@
+---
+- name   : playbook 8 setup ELK stack
+  hosts  : elk
+  become : yes
+ 
+  tasks  :
+
+  - name: Update repositories cache and install Java default-jdk
+    ansible.builtin.apt:
+      name: default-jdk
+      update_cache: yes
+
+  - name: Execute command install Elasticsearch
+    shell: 
+      cmd: "dpkg -i /install/elk/elasticsearch_8.9.1_amd64.deb"
+
+  - name: transfer Java config for Elasticsearch
+    copy: 
+      src: /ansible/push/elk/etc/elasticsearch/jvm.options.d/jvm.options
+      dest: /etc/elasticsearch/jvm.options.d/jvm.options
+      owner: root
+      group: root
+      mode: '644'
+
+  - name: transfer config for Elasticsearch
+    copy: 
+      src: /ansible/push/elk/etc/elasticsearch/elasticsearch.yml
+      dest: /etc/elasticsearch/elasticsearch.yml
+      owner: root
+      group: root
+      mode: '644'
+
+  - name: restart and enable Elasticsearch
+    systemd:
+      unit: elasticsearch.service
+      state: restarted
+      enabled: yes
+      daemon_reload: yes
+
+  - name: Execute command install Kibana
+    shell: 
+      cmd: "dpkg -i /install/elk/kibana_8.9.1_amd64.deb"
+
+  - name: transfer config for Kibana
+    copy: 
+      src: /ansible/push/elk/etc/kibana/kibana.yml
+      dest: /etc/kibana/kibana.yml
+      owner: root
+      group: root
+      mode: '644'
+
+  - name: restart and enable Kibana
+    systemd:
+      unit: kibana.service
+      state: restarted
+      enabled: yes
+      daemon_reload: yes
+
+  - name: Execute command install Logstash
+    shell: 
+      cmd: "dpkg -i /install/elk/logstash_8.9.1_amd64.deb"
+
+  - name: transfer config 1 for Logstash
+    copy: 
+      src: /ansible/push/elk/etc/logstash/logstash.yml
+      dest: /etc/logstash/logstash.yml
+      owner: root
+      group: root
+      mode: '644'
+
+  - name: transfer config 2 for Logstash
+    copy: 
+      src: /ansible/push/elk/etc/logstash/conf.d/logstash-nginx-es.conf
+      dest: /etc/logstash/conf.d/logstash-nginx-es.conf
+      owner: root
+      group: root
+      mode: '644'
+
+  - name: restart and enable Logstash
+    systemd:
+      unit: logstash.service
+      state: restarted
+      enabled: yes
+      daemon_reload: yes
+
+  - name: Execute command install Filebeat
+    shell: 
+      cmd: "dpkg -i /install/elk/filebeat_8.9.1_amd64.deb"
+
+  - name: transfer config for Filebeat
+    copy: 
+      src: /ansible/push/elk/etc/filebeat/filebeat.yml
+      dest: /etc/filebeat/filebeat.yml
+      owner: root
+      group: root
+      mode: '644'
+
+  - name: restart and enable Filebeat
+    systemd:
+      unit: filebeat.service
+      state: restarted
+      enabled: yes
+      daemon_reload: yes
+...

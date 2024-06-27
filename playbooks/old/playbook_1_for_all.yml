@@ -1,0 +1,168 @@
+---
+- name   : playbook for all hosts
+  hosts  : nginx, apache1, apache2
+  become : yes
+ 
+  tasks  :
+
+  - name: copy sources.list
+    copy:
+      src   : /ansible/push/all/etc/apt/sources.list
+      dest  : /etc/apt/sources.list
+      owner : root
+      group : root
+      mode  : '0644'
+      backup: yes
+
+  - name: transfer the script (install_basic_packages.sh)
+    copy: 
+      src: /ansible/push/all/tmp/install_basic_packages.sh
+      dest: /tmp/install_basic_packages.sh
+      owner: root
+      group: root
+      mode: '0777'
+
+  - name: execute the script - install_basic_packages.sh
+    ansible.builtin.script:      
+      cmd: /ansible/push/all/tmp/install_basic_packages.sh
+
+  - name: install a list of basic packages
+    ansible.builtin.apt:
+      pkg:
+      - mc
+      - htop
+      - iperf
+      - nfs-kernel-server
+      - telnet
+      - tree
+      - cifs-utils
+      - tcpdump
+      - sudo
+      - wget
+      - curl
+      - gnupg2
+      - vim
+      - iftop
+      - chrony
+      - mtr
+      - prometheus-node-exporter
+      update_cache: yes
+
+  - name: add line 1 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '####### add to all hostfiles #######'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 2 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.3	mowsprx1	#Proxmox'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 3 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.11	nginx		#Nginx'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 4 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.12	apache1		#Apache 1'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 5 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.13	apache2		#Apache 2'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 6 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.14	mysqlsrs	#MySQL source'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 7 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.15	mysqlrep	#MySQL replica'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 8 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.16	monitor		#Monitoring'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 9 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.17	elk		#ELK stack'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 10 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '10.68.7.18	ansible		#Ansible'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: add line 10 to /etc/hosts
+    ansible.builtin.lineinfile:
+      path   : /etc/hosts
+      line   : '###########################'
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: create a directory if it does not exist
+    ansible.builtin.file:
+      path   : /install
+      state  : directory
+      mode   : '0777'
+
+  - name: Add line NFS /www to /etc/fstab
+    ansible.builtin.lineinfile:
+      path   : /etc/fstab
+      line   : mowsprx1:/install                          /install        nfs   rw        0  0
+      create : yes
+      owner  : root
+      group  : root
+      mode   : '0644'
+
+  - name: Execute command mount www
+    shell: 
+      cmd: "systemctl daemon-reload && mount -a"
+...

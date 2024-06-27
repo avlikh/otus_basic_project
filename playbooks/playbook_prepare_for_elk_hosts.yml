@@ -1,0 +1,28 @@
+---
+- name   : playbook prepare for ELK hosts
+  hosts  : elk
+  become : yes
+ 
+  tasks  :
+
+  - name: Update repositories cache and install Java default-jdk
+    ansible.builtin.apt:
+      name: default-jdk
+      update_cache: yes
+
+  - name: Execute command install Elasticsearch
+    shell: 
+      cmd: "dpkg -i /install/elk/elasticsearch_8.9.1_amd64.deb"
+
+  - name: Execute command install Kibana
+    shell: 
+      cmd: "dpkg -i /install/elk/kibana_8.9.1_amd64.deb"
+
+  - name: Execute command install Logstash
+    shell: 
+      cmd: "dpkg -i /install/elk/logstash_8.9.1_amd64.deb"
+
+  - name: Execute command install Filebeat
+    shell: 
+      cmd: "dpkg -i /install/elk/filebeat_8.9.1_amd64.deb"
+...

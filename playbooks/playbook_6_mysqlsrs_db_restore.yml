@@ -1,0 +1,30 @@
+---
+- name   : playbook 6 for Wordpress MySQL DB restore 
+  hosts  : mysqlsrs
+  become : yes
+ 
+  tasks  :
+
+  - name: create a directory if it does not exist /scripts
+    ansible.builtin.file:
+      path   : /scripts
+      state  : directory
+      mode   : '0777'
+
+  - name: copy MySQL repository
+    copy:
+      src   : /ansible/push/mysqlsrs/scripts/restore_mysql.sh
+      dest  : /scripts/restore_mysql.sh
+      owner : root
+      group : root
+      mode  : '0777'
+      backup: yes
+
+  - name: chmod x for Wordpress MySQL db restore script
+    shell: 
+      cmd: "chmod +x /scripts/restore_mysql.sh"
+
+  - name: restore Wordpress MySQL database
+    shell: 
+      cmd: "/scripts/restore_mysql.sh"
+...

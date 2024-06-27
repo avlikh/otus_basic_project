@@ -1,0 +1,9 @@
+[OTUS]
+nginx		ansible_host=nginx
+apache1		ansible_host=apache1
+apache2		ansible_host=apache2
+mysqlsrs	ansible_host=mysqlsrs
+mysqlrep	ansible_host=mysqlrep
+monitor		ansible_host=monitor
+elk		ansible_host=elk
+ansible		ansible_host=ansible

@@ -1,0 +1,46 @@
+---
+- name   : playbook nginx
+  hosts  : nginx
+  become : yes
+ 
+  tasks  :
+
+  - name: Update repositories cache and install Nginx
+    ansible.builtin.apt:
+      name: nginx
+      update_cache: yes
+
+  - name: transfer config for NGINX
+    copy: 
+      src: /ansible/push/nginx/sites-available/default
+      dest: /etc/nginx/sites-available/default
+      owner: root
+      group: root
+      mode: '644'
+
+  - name: restart nginx
+    systemd:
+      unit: nginx
+      state: restarted
+      enabled: yes
+      daemon_reload: yes
+
+  - name: Execute command install filebit for Nginx
+    shell: 
+      cmd: "dpkg -i /install/elk/filebeat_8.9.1_amd64.deb"
+
+  - name: transfer config for filebeat
+    copy: 
+      src: /ansible/push/nginx/etc/filebeat/filebeat.yml
+      dest: /etc/filebeat/filebeat.yml
+      owner: root
+      group: root
+      mode: '600'
+
+  - name: restart filebeat
+    systemd:
+      unit: filebeat.service
+      state: restarted
+      enabled: yes
+      daemon_reload: yes
+...
