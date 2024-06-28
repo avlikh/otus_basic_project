@@ -26,7 +26,7 @@ ssh-copy-id monitor
 ssh-copy-id elk
 
 echo -e 'Git clone Ansible settings...';
-
+git clone git@github.com:avlikh/otus_basic_project.git /ansible
 
 echo -e 'running Ansible playbook 1 of 8 for all hosts';
 ansible-playbook /ansible/playbooks/playbook_1_for_all.yml -u root;
