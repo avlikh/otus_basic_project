@@ -17,16 +17,8 @@ echo -e 'Installing Ansible...';
 apt -y install python3 ansible-core sshpass
 mkdir /ansible ; cd /ansible
 
-ssh-copy-id nginx
-ssh-copy-id Apache1
-ssh-copy-id Apache2
-ssh-copy-id mysqlsrs
-ssh-copy-id mysqlrep
-ssh-copy-id monitor
-ssh-copy-id elk
-
 echo -e 'running Ansible playbook 1 of 8 for all hosts';
-ansible-playbook /ansible/playbooks/playbook_1_for_all.yml -u root;
+ansible-playbook /ansible/playbooks/playbook_1_for_all.yml -u root --ask-pass;
 
 echo -e 'running Ansible playbook 2 of 8 for NGINX';
 ansible-playbook /ansible/playbooks/playbook_2_nginx.yml -u root;
