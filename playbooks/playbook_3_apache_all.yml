@@ -24,7 +24,7 @@
     shell: 
       cmd: "systemctl daemon-reload && mount -a"
 
-  - name: install a list of basic packages
+  - name: install apache2
     ansible.builtin.apt:
       name: apache2
       update_cache: yes
