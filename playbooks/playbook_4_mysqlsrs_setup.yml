@@ -47,6 +47,10 @@
       enabled: yes
       daemon_reload: yes
 
+  - name: Wait about 5 seconds
+    shell: 
+      cmd: apt update -y
+
   - name: Execute command create user for MySQL source
     shell: 
       cmd: mysql -e "CREATE USER repl@'%' IDENTIFIED WITH 'caching_sha2_password' BY 'oTUSlave#2020';"
