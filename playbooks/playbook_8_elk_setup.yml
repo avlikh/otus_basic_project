@@ -10,9 +10,9 @@
       name: default-jdk
       update_cache: yes
 
-  - name: Execute command install Elasticsearch
-    shell: 
-      cmd: "dpkg -i /install/elk/elasticsearch_8.9.1_amd64.deb"
+  - name: Install Elasticsearch
+    ansible.builtin.apt: 
+      deb: /install/elk/elasticsearch_8.9.1_amd64.deb
 
   - name: transfer Java config for Elasticsearch
     copy: 
@@ -37,9 +37,9 @@
       enabled: yes
       daemon_reload: yes
 
-  - name: Execute command install Kibana
-    shell: 
-      cmd: "dpkg -i /install/elk/kibana_8.9.1_amd64.deb"
+  - name: install Kibana
+    ansible.builtin.apt: 
+      deb: /install/elk/kibana_8.9.1_amd64.deb
 
   - name: transfer config for Kibana
     copy: 
@@ -56,9 +56,9 @@
       enabled: yes
       daemon_reload: yes
 
-  - name: Execute command install Logstash
-    shell: 
-      cmd: "dpkg -i /install/elk/logstash_8.9.1_amd64.deb"
+  - name: install Logstash
+    ansible.builtin.apt: 
+      deb: /install/elk/logstash_8.9.1_amd64.deb
 
   - name: transfer config 1 for Logstash
     copy: 
@@ -83,9 +83,9 @@
       enabled: yes
       daemon_reload: yes
 
-  - name: Execute command install Filebeat
-    shell: 
-      cmd: "dpkg -i /install/elk/filebeat_8.9.1_amd64.deb"
+  - name: install Filebeat
+    ansible.builtin.apt: 
+      deb: /install/elk/filebeat_8.9.1_amd64.deb
 
   - name: transfer config for Filebeat
     copy: 
