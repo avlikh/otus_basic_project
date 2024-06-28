@@ -13,32 +13,32 @@ cat <<EOF >>/etc/hosts
 ###########################
 EOF
 
-echo -e 'Installing Ansible...';
+echo -e "\033[0;32m Installing Ansible...";
 apt -y install python3 ansible-core sshpass
 mkdir /ansible ; cd /ansible
 
-echo -e 'running Ansible playbook 1 of 8 for all hosts';
+echo -e "\033[0;32m running Ansible playbook 1 of 8 for all hosts";
 ansible-playbook /ansible/playbooks/playbook_1_for_all.yml -u root --ask-pass;
 
-echo -e 'running Ansible playbook 2 of 8 for NGINX';
+echo -e "\033[0;32m running Ansible playbook 2 of 8 for NGINX";
 ansible-playbook /ansible/playbooks/playbook_2_nginx.yml -u root;
 
-echo -e 'running Ansible playbook 3 of 8 for apache2';
+echo -e "\033[0;32m running Ansible playbook 3 of 8 for apache2";
 ansible-playbook /ansible/playbooks/playbook_3_apache_all.yml -u root;
 
-echo -e 'running Ansible playbook 4 of 8 for MySQL source setup';
+echo -e "\033[0;32m running Ansible playbook 4 of 8 for MySQL source setup";
 ansible-playbook /ansible/playbooks/playbook_4_mysqlsrs_setup.yml -u root;
 
-echo -e 'running Ansible playbook 5 of 8 for MySQL replica setup and restore www';
+echo -e "\033[0;32m running Ansible playbook 5 of 8 for MySQL replica setup and restore www";
 ansible-playbook /ansible/playbooks/playbook_5_mysqlrep_setup_and_restore_www.yml -u root;
 
-echo -e 'running Ansible playbook 6 of 8 for Wordpress MySQL DB restore';
+echo -e "\033[0;32m running Ansible playbook 6 of 8 for Wordpress MySQL DB restore";
 ansible-playbook /ansible/playbooks/playbook_6_mysqlsrs_db_restore.yml -u root;
 
-echo -e 'running Ansible playbook 7 of 8 Prometheus and Grafana monitoring setup';
+echo -e "\033[0;32m running Ansible playbook 7 of 8 Prometheus and Grafana monitoring setup";
 ansible-playbook /ansible/playbooks/playbook_7_monitoring_setup.yml -u root;
 
-echo -e 'running Ansible playbook 8 of 8 setup ELK stack';
+echo -e "\033[0;32m running Ansible playbook 8 of 8 setup ELK stack";
 ansible-playbook /ansible/playbooks/playbook_8_elk_setup.yml -u root;
 
-echo -e 'Complete!';
+echo -e "\033[0;32m Complete!";
