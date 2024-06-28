@@ -25,9 +25,9 @@
       enabled: yes
       daemon_reload: yes
 
-  - name: Execute command install Filebeat for NGINX
-    shell: 
-      cmd: "dpkg -i /install/elk/filebeat_8.9.1_amd64.deb"
+  - name: install Filebeat for NGINX
+    ansible.builtin.apt: 
+      deb: /install/elk/filebeat_8.9.1_amd64.deb
 
   - name: transfer config for Filebeat
     copy: 
